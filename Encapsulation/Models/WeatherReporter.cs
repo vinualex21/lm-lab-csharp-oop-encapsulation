@@ -3,8 +3,10 @@ namespace Encapsulation.Models
 {
     public class WeatherReporter
     {
-        public string Location;
+        public readonly string Location;
         public double Temperature;
+        private const double THRESHOLD_HOT = 30;
+        private const double THRESHOLD_COLD = 10;
 
         public WeatherReporter(string location, double temperature)
         {
@@ -12,13 +14,23 @@ namespace Encapsulation.Models
             Temperature = temperature;
         }
 
-        public string Print()
+        public void PrintFahrenheitWeatherReport()
         {
-            double newTemp = (9.0 / 5.0) * Temperature + 32;
-            return $"I am in {Location} and it is {Check1()}. {Check2()}. The temperature in Fahrenheit is {newTemp}.";
+            var FahrenheitTemp = ConvertCelciusToFahrenheit(Temperature);
+            Console.WriteLine($"I am in {Location} and it is {GetWeatherCondition()}. {GetTemperatureCondition()}. The temperature in Fahrenheit is {FahrenheitTemp}.");
         }
 
-        public string Check1()
+        public void PrintCelciusWeatherReport()
+        {
+            Console.WriteLine($"I am in {Location} and it is {GetWeatherCondition()}. {GetTemperatureCondition()}. The temperature in Celcius is {Temperature}.");
+        }
+
+        private double ConvertCelciusToFahrenheit(double temperature)
+        {
+            return (9.0 / 5.0) * temperature + 32;
+        }
+
+        private string GetWeatherCondition()
         {
             if (Location == "London")
             {
@@ -41,15 +53,15 @@ namespace Encapsulation.Models
             return "🔆";
         }
 
-        public string Check2()
+        private string GetTemperatureCondition()
         {
-            if (Temperature > 30)
+            if (Temperature > THRESHOLD_HOT)
             {
 
                 return "It's too hot 🥵!";
 
             }
-            else if (Temperature < 10)
+            else if (Temperature < THRESHOLD_COLD)
             {
 
                 return "It's too cold 🥶!";
